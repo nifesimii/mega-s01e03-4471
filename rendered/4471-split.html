@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#4471 · three problems, not one · support knowledge base</title>
+<style>
+  :root { --muted:#666; --warn:#a33; --accent:#1a6; --line:#ccc; --mono: ui-monospace, monospace; }
+  body { font: 16px/1.55 system-ui, sans-serif; max-width: 46rem; margin: 2rem auto; padding: 0 1rem; }
+  table { border-collapse: collapse; width: 100%; margin: 1rem 0; } th, td { border: 1px solid var(--line); padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  .tags { color: var(--muted); font-size: .85em; } .sum { font-size: 1.1rem; }
+  .callout { border-left: 4px solid var(--accent); padding: .1rem .8rem; background: #f3faf6; font-weight: 600; }
+  .meta { color: var(--muted); font: .85rem var(--mono); } .stamp { margin: 2rem 0 0; font: .85rem var(--mono); color: var(--muted); } .stamp b { color: var(--accent); letter-spacing: .04em; }
+</style></head><body>
+<p class="meta">owner nifesimii · status proposed · reviewed 2026-10-29</p>
+<h1>#4471 · three problems, not one</h1>
+<p><a href="/kb/incidents/4471">#4471</a> says one issue, one fix. The reports say otherwise. Dates go wrong for <strong>three different reasons</strong>, and the queued fix covers one of them.</p>
+<div class="callout"><p>Not one known issue. Three problems, each with its own ticket.</p></div>
+<h2>The three problems</h2>
+<p class="sum"><strong>412</strong> reports merged into #4471 · <strong>3</strong> problems</p>
+<table><thead><tr><th>problem</th><th>reports</th><th>intake tagged them</th><th>tenants</th><th>seen</th></tr></thead><tbody>
+      <tr><td><code>parser</code></td><td>374</td><td class="tags">parser ×351 · hint ×23</td><td>11</td><td>2026-04-01 → 2026-10-04</td></tr>
+      <tr><td><code>hint</code></td><td>33</td><td class="tags">hint ×18 · parser ×15</td><td>3</td><td>2026-04-17 → 2026-09-22</td></tr>
+      <tr><td><code>one-day</code></td><td>5</td><td class="tags">parser ×5</td><td>5</td><td>2026-04-02 → 2026-10-04</td></tr>
+</tbody></table>
+<p class="tags">15 rows in the export repeat an id; each report is counted once. 10 of 12 subject lines appear under more than one problem.</p>
+<table><thead><tr><th>ticket</th><th>problem</th><th>what happens</th></tr></thead><tbody>
+<tr><td><a href="https://github.com/nifesimii/mega-s01e03-4471/issues/1">#1</a></td><td><code>parser</code></td><td>The shared parser reads every date month first. A day-first tenant's dates come out flipped.</td></tr>
+<tr><td><a href="https://github.com/nifesimii/mega-s01e03-4471/issues/2">#2</a></td><td><code>hint</code></td><td>booking-v3 prints <code>MM/DD/YYYY</code> under the date field. Day-first tenants type what it says, and the form reads it day first.</td></tr>
+<tr><td><a href="https://github.com/nifesimii/mega-s01e03-4471/issues/3">#3</a></td><td><code>one-day</code></td><td>The date is one day off. The month and the day are not swapped.</td></tr>
+</tbody></table>
+<p>The numbers above are computed from the export, not typed.</p>
+<h2>How we told them apart</h2>
+<p>A report's cause depends on its tenant: the locale it writes dates in, and the booking form it runs. The intake tag is a guess from the reporter's browser. The table shows how far it is off: intake tagged some <code>parser</code> reports <code>hint</code>, and some <code>hint</code> reports <code>parser</code>.</p>
+<p>The one-day reports come from the desk's own notes (<code>oneDayMove</code> in <code>desk-notes.json</code>). Read them: "Tuesday 12 May. Calendar says Monday 11 May", "Every booking in June is one day off", "Client in Lisbon got Tuesday. Client in Toronto got Monday". None of them swaps a month and a day. We think they point at time zones. The export cannot prove it, so #3 asks someone to check.</p>
+<h2>What the subject line hid</h2>
+<p><a href="/kb/decisions/0001-dedupe-by-subject">Decision 0001</a> merges on the subject line alone. The table counts the subject lines that appear under more than one problem: most of them do. A subject says how a person felt about the bug. It does not say which bug it is. This is why three problems ended up as one ticket.</p>
+<h2>What to do</h2>
+<ul>
+<li>Fix the parser for day-first tenants. That is the queued fix, and it closes #1 only.</li>
+<li>Make booking-v3 show the order the tenant writes, or make the form read what the hint says. #2 stays open until one of them ships.</li>
+<li>Look at the one-day reports for a time zone cause (#3).</li>
+<li>Replace decision 0001 with a new record. Do not edit it: accepted records are never edited.</li>
+<li>Until then, do not merge a report on its subject line alone. Check the tenant and the channel.</li>
+</ul>
+<h2>Check my work</h2>
+<ul>
+<li>Four <code>parser</code> reports (R-41290, R-41417, R-41514, R-41615) do not name a date pair. They are filed under <code>parser</code> because of their tenant, as <code>causes.ts</code> says. Every other <code>parser</code> and <code>hint</code> report shows a clear month and day flip.</li>
+<li>The <code>hint</code> reports all come through the form channel, from three tenants: Alder Physio, Copper Studio and Pale Harbour.</li>
+</ul>
+<p class="stamp">desk ref <b>DR-N6PC-NF8S</b></p>
+</body></html>

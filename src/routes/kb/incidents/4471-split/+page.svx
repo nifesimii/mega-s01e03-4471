@@ -1,0 +1,65 @@
+---
+layout: runbook
+title: '#4471 · three problems, not one'
+owner: nifesimii
+status: proposed
+reviewed: 2026-10-29
+signature: v1.eyJzdWIiOiIxMzEwIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyOTYyOTAsImV4cCI6MTc5MzM4MjY5MH0.rKaEXKmYghuLDcb47bxCN4v8-pcS3bf_buVAVMQRgtM
+---
+
+<script>
+  import SplitTable from '#lib/kb/SplitTable.svelte';
+  import Callout from '#lib/kb/Callout.svelte';
+  import RenderStamp from '#lib/kb/RenderStamp.svelte';
+</script>
+
+[#4471](/kb/incidents/4471) says one issue, one fix. The reports say otherwise. Dates go wrong for
+**three different reasons**, and the queued fix covers one of them.
+
+<Callout>
+Not one known issue. Three problems, each with its own ticket.
+</Callout>
+
+## The three problems
+
+<SplitTable ticket={4471} />
+
+| ticket | problem | what happens |
+| --- | --- | --- |
+| [#1](https://github.com/nifesimii/mega-s01e03-4471/issues/1) | `parser` | The shared parser reads every date month first. A day-first tenant's dates come out flipped. |
+| [#2](https://github.com/nifesimii/mega-s01e03-4471/issues/2) | `hint` | booking-v3 prints `MM/DD/YYYY` under the date field. Day-first tenants type what it says, and the form reads it day first. |
+| [#3](https://github.com/nifesimii/mega-s01e03-4471/issues/3) | `one-day` | The date is one day off. The month and the day are not swapped. |
+
+The numbers above are computed from the export, not typed.
+
+## How we told them apart
+
+A report's cause depends on its tenant: the locale it writes dates in, and the booking form it
+runs. The intake tag is a guess from the reporter's browser. The table shows how
+far it is off: intake tagged some `parser` reports `hint`, and some `hint` reports `parser`.
+
+The one-day reports come from the desk's own notes (`oneDayMove` in `desk-notes.json`). Read them:
+"Tuesday 12 May. Calendar says Monday 11 May", "Every booking in June is one day off", "Client in
+Lisbon got Tuesday. Client in Toronto got Monday". None of them swaps a month and a day. We think
+they point at time zones. The export cannot prove it, so #3 asks someone to check.
+
+## What the subject line hid
+
+[Decision 0001](/kb/decisions/0001-dedupe-by-subject) merges on the subject line alone. The table
+counts the subject lines that appear under more than one problem: most of them do. A subject says how a person felt about
+the bug. It does not say which bug it is. This is why three problems ended up as one ticket.
+
+## What to do
+
+- Fix the parser for day-first tenants. That is the queued fix, and it closes #1 only.
+- Make booking-v3 show the order the tenant writes, or make the form read what the hint says. #2 stays open until one of them ships.
+- Look at the one-day reports for a time zone cause (#3).
+- Replace decision 0001 with a new record. Do not edit it: accepted records are never edited.
+- Until then, do not merge a report on its subject line alone. Check the tenant and the channel.
+
+## Check my work
+
+- Four `parser` reports (R-41290, R-41417, R-41514, R-41615) do not name a date pair. They are filed under `parser` because of their tenant, as `causes.ts` says. Every other `parser` and `hint` report shows a clear month and day flip.
+- The `hint` reports all come through the form channel, from three tenants: Alder Physio, Copper Studio and Pale Harbour.
+
+<RenderStamp {signature} />
