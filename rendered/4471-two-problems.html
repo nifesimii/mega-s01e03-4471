@@ -10,9 +10,9 @@
   .callout { border-left: 4px solid var(--accent); padding: .1rem .8rem; background: #f3faf6; font-weight: 600; }
   .meta { color: var(--muted); font: .85rem var(--mono); } .stamp { margin: 2rem 0 0; font: .85rem var(--mono); color: var(--muted); } .stamp b { color: var(--accent); letter-spacing: .04em; }
 </style></head><body>
-<p class="meta">owner nifesimii · status proposed · reviewed 2026-10-29</p>
+<p class="meta">owner nifesimii · status resolved · reviewed 2026-10-29</p>
 <h1>#4471 · two problems, not one</h1>
-<p><a href="/kb/incidents/4471">#4471</a> says one issue, one fix. The reports say otherwise. Dates go wrong for <strong>two different reasons</strong>, and the queued fix covers one of them.</p>
+<p><a href="/kb/incidents/4471">#4471</a> says one issue, one fix. The reports say otherwise. Dates went wrong for <strong>two different reasons</strong>, and the queued fix covered one of them.</p>
 <div class="callout"><p>Not one known issue. Two problems, each with its own ticket.</p></div>
 <h2>The two problems</h2>
 <p class="sum"><strong>412</strong> reports merged into #4471 · <strong>2</strong> causes</p>
@@ -33,12 +33,17 @@
 <p>The desk's notes mark some reports as a one-day move (<code>oneDayMove</code> in <code>desk-notes.json</code>). Read them: "Tuesday 12 May. Calendar says Monday 11 May", "Every booking in June is one day off", "Client in Lisbon got Tuesday. Client in Toronto got Monday". The desk counts them under <code>parser</code>, where their tenant files them, and footnotes them under the table. We keep that count. We also note that none of them swaps a month and a day, and some mention two places. If someone fixes the parser and these reports keep coming, look at time zones next. The export cannot prove it either way.</p>
 <h2>What the subject line hid</h2>
 <p><a href="/kb/decisions/0001-dedupe-by-subject">Decision 0001</a> merges on the subject line alone. The note under the table counts the subject lines that appear under both causes: most of them do. A subject says how a person felt about the bug. It does not say which bug it is. This is why two problems ended up as one ticket.</p>
-<h2>What to do</h2>
+<h2>What happened</h2>
+<p>The desk closed #4471 on 5 October.</p>
 <ul>
-<li>Fix the parser for day-first tenants. That is the queued fix, and it closes #1 only.</li>
-<li>Make booking-v3 show the order the tenant writes, or make the form read what the hint says. #2 stays open until one of them ships.</li>
+<li><code>parser</code>: fixed (<code>fix(dates): parse dd/mm for eu locales</code>). #1 is closed.</li>
+<li><code>hint</code>: won't fix, because the booking-v3 form is retired. #2 is closed.</li>
+</ul>
+<p>Still open for the desk:</p>
+<ul>
 <li>Replace decision 0001 with a new record. Do not edit it: accepted records are never edited.</li>
 <li>Until then, do not merge a report on its subject line alone. Check the tenant and the channel.</li>
+<li>If one-day reports keep coming after the parser fix, look at time zones.</li>
 </ul>
 <h2>Check my work</h2>
 <ul>

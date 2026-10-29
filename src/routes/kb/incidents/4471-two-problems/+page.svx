@@ -2,7 +2,7 @@
 layout: runbook
 title: '#4471 · two problems, not one'
 owner: nifesimii
-status: proposed
+status: resolved
 reviewed: 2026-10-29
 signature: v1.eyJzdWIiOiIxMzEwIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYXQiOjE3OTMyOTYyOTAsImV4cCI6MTc5MzM4MjY5MH0.rKaEXKmYghuLDcb47bxCN4v8-pcS3bf_buVAVMQRgtM
 ---
@@ -14,8 +14,8 @@ signature: v1.eyJzdWIiOiIxMzEwIiwiYXVkIjoiY2hhbGxlbmdlOndoYXQtaXQtc2hvd3MiLCJpYX
   import RenderStamp from '#lib/kb/RenderStamp.svelte';
 </script>
 
-[#4471](/kb/incidents/4471) says one issue, one fix. The reports say otherwise. Dates go wrong for
-**two different reasons**, and the queued fix covers one of them.
+[#4471](/kb/incidents/4471) says one issue, one fix. The reports say otherwise. Dates went wrong for
+**two different reasons**, and the queued fix covered one of them.
 
 <Callout>
 Not one known issue. Two problems, each with its own ticket.
@@ -57,12 +57,18 @@ the table counts the subject lines that appear under both causes: most of them d
 a person felt about the bug. It does not say which bug it is. This is why two problems ended up as
 one ticket.
 
-## What to do
+## What happened
 
-- Fix the parser for day-first tenants. That is the queued fix, and it closes #1 only.
-- Make booking-v3 show the order the tenant writes, or make the form read what the hint says. #2 stays open until one of them ships.
+The desk closed #4471 on 5 October.
+
+- `parser`: fixed (`fix(dates): parse dd/mm for eu locales`). #1 is closed.
+- `hint`: won't fix, because the booking-v3 form is retired. #2 is closed.
+
+Still open for the desk:
+
 - Replace decision 0001 with a new record. Do not edit it: accepted records are never edited.
 - Until then, do not merge a report on its subject line alone. Check the tenant and the channel.
+- If one-day reports keep coming after the parser fix, look at time zones.
 
 ## Check my work
 
